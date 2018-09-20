@@ -7,11 +7,6 @@
  */
 namespace app\lib\seal;
 
-use app\api\service\Test;
-use app\api\service\Two;
-use app\api\service\User;
-use app\lib\validate\CustomValidate;
-
 class Factory
 {
     public static function redis()
@@ -32,6 +27,7 @@ class Factory
      */
     public static function validate($string)
     {
-        (new CustomValidate())->requires($string)->goCheck();
+        (new \app\lib\validate\CustomValidate())
+            ->requires($string)->goCheck();
     }
 }

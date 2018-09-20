@@ -21,7 +21,7 @@ class WithToken extends Base
      * WithToken constructor.
      * @throws ParameterException
      */
-    public function __construct()
+    public function userNeedToken()
     {
         parent::__construct();
         $token = Request::header('token');

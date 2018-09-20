@@ -7,7 +7,6 @@
  */
 namespace app\api\controller\v1;
 
-use app\api\model\Base;
 use app\api\model\Idea;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
@@ -15,6 +14,9 @@ use app\lib\seal\tool\NormalInter;
 
 class Ideas extends WithToken implements NormalInter
 {
+    protected $beforeActionList = [
+        ''
+    ];
     /**
      * Notes: idea列表
      * Date: 2018/9/11 0011
@@ -25,8 +27,8 @@ class Ideas extends WithToken implements NormalInter
     public function index($title = '')
     {
         $model = Idea::getInstant();
-        $model->create_time = $title;
-        $list = $model->setMap()->order('create_time desc')->paginate(10);
+//        $model->create_time = $title;
+        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
         Response::success($list);
     }
 
@@ -41,7 +43,6 @@ class Ideas extends WithToken implements NormalInter
     {
         $result = Idea::get($id);
         Response::success($result);
-        // TODO: Implement read() method.
     }
 
     /**
@@ -54,7 +55,7 @@ class Ideas extends WithToken implements NormalInter
      */
     public function create($title = '', $content = '')
     {
-        Factory::validate('content,title');
+        Factory::validate('title,content');
         $model = Idea::getInstant();
 
         $model->setId();
@@ -65,7 +66,6 @@ class Ideas extends WithToken implements NormalInter
 
         if ($res) Response::success('新增成功');
         Response::error('新增失败');
-        // TODO: Implement create() method.
     }
 
     public function delete($id = '')
@@ -73,12 +73,16 @@ class Ideas extends WithToken implements NormalInter
         Factory::validate('id');
         Idea::destroy($id);
         Response::success('删除成功');
-        // TODO: Implement delete() method.
     }
 
     public function save()
     {
-        // TODO: Implement save() method.
+    }
+
+    public function douban()
+    {
+        $result = file_get_contents('http://api.douban.com/v2/movie/subject/26683290');
+        var_dump($result);
     }
 
     /**
@@ -97,7 +101,5 @@ class Ideas extends WithToken implements NormalInter
         $model->content = 123;
         $model->save();
         Response::success('修改成功');
-        // TODO: Implement update() method.
     }
-
 }

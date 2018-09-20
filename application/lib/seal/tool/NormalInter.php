@@ -7,6 +7,8 @@
  */
 namespace app\lib\seal\tool;
 
+use think\Request;
+
 Interface NormalInter
 {
     public function index();

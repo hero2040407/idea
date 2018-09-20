@@ -9,11 +9,10 @@ namespace app\api\service\micro;
 
 use app\api\model\User;
 use app\lib\seal\Factory;
-use app\lib\seal\http\Request;
+use app\lib\seal\http\Curl;
 use app\lib\seal\http\Response;
-use app\lib\seal\Redis;
 use app\lib\seal\tool\Common;
-use think\Exception;
+use think\facade\Request;
 
 class Login
 {
@@ -31,7 +30,7 @@ class Login
         $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='. self::APP_ID .'&secret='
             . self::APP_SECRET .'&js_code='. $this->code .'&grant_type=authorization_code';
 
-        return Request::https($url);
+        return Curl::https($url);
     }
 
     /**
@@ -72,11 +71,15 @@ class Login
         }
         else $uid = $this->register($result);
 
-        session_start();
-        $token = md5(session_id().$uid.time());
+        $token = Request::header('token');
+        $res = Factory::redis()->get($token);
 
-        $res = Factory::redis()->set($token,$uid,3600*24*7);
-        if ($res) return ['token' => $token];
-        Response::error('token未能正确设置');
+        if (!$res){
+            session_start();
+            $token = md5(session_id().$uid.time());
+            $res = Factory::redis()->set($token,$uid,3600*24*7);
+            if (!$res) Response::error('token未能正确设置');
+        }
+        return $token;
     }
 }

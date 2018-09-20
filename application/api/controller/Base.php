@@ -16,19 +16,6 @@ class Base extends Controller
 {
 
     /**
-     * 添加数据
-     * @url /post
-     * @method POST
-     * @param string $name 姓名
-     * @param string $age 年龄
-     * @return int $code 状态码
-     */
-    public function index()
-    {
-        echo 'this is base';
-    }
-
-    /**
      * Notes:
      * Date: 2018/8/25 0025
      * Time: 下午 3:34

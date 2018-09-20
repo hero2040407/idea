@@ -33,7 +33,7 @@ class ExceptionHandle extends Handle
         }
         $result = [
             'code' => $this->errorCode,
-            'msg'  => $this->msg,
+            'data'  => $this->msg,
 //            'request_url' => $request = Request::url()
         ];
         return json($result, $this->code);

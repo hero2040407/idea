@@ -9,7 +9,7 @@ namespace app\lib\seal\http;
 
 use think\facade\Log;
 
-class Request
+class Curl
 {
     /**
      * Notes:
@@ -43,6 +43,5 @@ class Request
     {
         
     }
-
 
 }

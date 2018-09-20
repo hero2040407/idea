@@ -56,7 +56,7 @@ class Response
     {
         throw new HttpResponseException(json([
             'code' => $this->errorCode,
-            'msg' => $this->data
+            'data' => $this->data
         ], 400));
     }
 
