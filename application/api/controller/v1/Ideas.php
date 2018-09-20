@@ -15,7 +15,7 @@ use app\lib\seal\tool\NormalInter;
 class Ideas extends WithToken implements NormalInter
 {
     protected $beforeActionList = [
-        ''
+        'userNeedToken' => ['except' => 'index,read']
     ];
     /**
      * Notes: idea列表
@@ -28,8 +28,8 @@ class Ideas extends WithToken implements NormalInter
     {
         $model = Idea::getInstant();
 //        $model->create_time = $title;
-        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
-        Response::success($list);
+//        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
+//        Response::success($list);
     }
 
     /**

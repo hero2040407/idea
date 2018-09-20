@@ -39,15 +39,16 @@ class Login
      * Time: 下午 3:10
      * @throws
      */
-    public function register($result)
+    public function register($result, $userInfo)
     {
         $model = new User();
-        $uuid = Common::generateUniqueId();
-        $model->id = $uuid;
+        $model->setId();
         $model->openid = $result['openid'];
         $model->session_key = $result['session_key'];
+        $model->avatar = $userInfo['avatarUrl'];
+        $model->nickname = $userInfo['nickName'];
         $model->save();
-        return $uuid;
+        return $model->id;
     }
 
     /**
@@ -56,7 +57,7 @@ class Login
      * Time: 下午 4:02
      * @throws
      */
-    public function login()
+    public function login($userInfo)
     {
         $result = $this->getOpenId();
         $model = new User();
@@ -66,10 +67,14 @@ class Login
 
         if ($uid){
             $model->save(
-                ['session_key' => $result['session_key']],
+                [
+                    'session_key' => $result['session_key'],
+                    'avatar' => $userInfo['avatarUrl'],
+                    'nickname' => $userInfo['nickName']
+                ],
                 ['openid' => $result['openid']]);
         }
-        else $uid = $this->register($result);
+        else $uid = $this->register($result, $userInfo);
 
         $token = Request::header('token');
         $res = Factory::redis()->get($token);

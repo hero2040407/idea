@@ -10,7 +10,6 @@ namespace app\api\controller\v1;
 use app\api\controller\Base;
 use app\lib\exception\ParameterException;
 use app\lib\seal\Factory;
-use app\lib\seal\http\Response;
 use think\facade\Request;
 
 class WithToken extends Base
@@ -23,7 +22,6 @@ class WithToken extends Base
      */
     public function userNeedToken()
     {
-        parent::__construct();
         $token = Request::header('token');
         $uid = Factory::redis()->get($token);
         if (!$uid)

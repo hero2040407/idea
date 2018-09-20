@@ -21,12 +21,12 @@ class User extends Base
      * @param string $code
      * @throws
      */
-    public function login($code = '')
+    public function login($code = '', $userInfo = '')
     {
-        Factory::validate('code');
+        Factory::validate('code,userInfo');
         $login = (new Login());
         $login->setCode($code);
-        $result = $login->login();
+        $result = $login->login($userInfo);
 
         Response::success($result);
     }
