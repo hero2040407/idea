@@ -15,7 +15,7 @@ use app\lib\seal\tool\NormalInter;
 class Ideas extends WithToken implements NormalInter
 {
     protected $beforeActionList = [
-        ''
+        'userNeedToken' => ['except' => 'index,read']
     ];
     /**
      * Notes: idea列表
@@ -57,7 +57,6 @@ class Ideas extends WithToken implements NormalInter
     {
         Factory::validate('title,content');
         $model = Idea::getInstant();
-
         $model->setId();
         $model->content = $content;
         $model->uid = $this->uid;

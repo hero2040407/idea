@@ -8,6 +8,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\Base;
+use app\api\service\UserTokenAccess;
 use app\lib\exception\ParameterException;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
@@ -21,16 +22,10 @@ class WithToken extends Base
      * WithToken constructor.
      * @throws ParameterException
      */
-    public function userNeedToken()
+    protected function userNeedToken()
     {
-        parent::__construct();
-        $token = Request::header('token');
-        $uid = Factory::redis()->get($token);
-        if (!$uid)
-            throw new ParameterException([
-                'msg' => 'token已经过期,请重新获取',
-                'errorCode' => 40101
-            ]);
-        $this->uid = $uid;
+        $this->uid = UserTokenAccess::needToken();
     }
+
+
 }
