@@ -15,7 +15,7 @@ use app\lib\seal\tool\NormalInter;
 class Ideas extends WithToken implements NormalInter
 {
     protected $beforeActionList = [
-        'userNeedToken' => ['except' => 'index,read']
+        'userNeedToken' => ['except' => 'index,read,items']
     ];
     /**
      * Notes: idea列表
@@ -27,9 +27,10 @@ class Ideas extends WithToken implements NormalInter
     public function index($title = '')
     {
         $model = Idea::getInstant();
-//        $model->create_time = $title;
-//        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
-//        Response::success($list);
+        $model->create_time = $title;
+        $model->pid = 0;
+        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
+        Response::success($list);
     }
 
     /**
@@ -41,7 +42,30 @@ class Ideas extends WithToken implements NormalInter
      */
     public function read($id = '')
     {
-        $result = Idea::get($id);
+        $model = Idea::getInstant();
+        $result = $model->readWithUserInfo($id);
+        $result->isAuthor = false;
+        if ( $this->uid == $result->uid)
+            $result->isAuthor = true;
+
+//        $idea = Idea::get($id);
+//        $user_info = User::get($idea->uid);
+//        $idea->nickname = $user_info->nickname;
+//        $idea->avatarUrl = $user_info->avatar;
+        Response::success($result);
+    }
+
+    /**
+     * Notes:获取idea的子信息
+     * Date: 2018/9/21 0021
+     * Time: 下午 1:56
+     * @throws
+     */
+    public function items($pid = '')
+    {
+        Factory::validate('pid');
+        $model = Idea::getInstant();
+        $result = $model->where('pid',$pid)->paginate(10,true);
         Response::success($result);
     }
 
@@ -53,7 +77,7 @@ class Ideas extends WithToken implements NormalInter
      * @param string $content
      * @throws
      */
-    public function create($title = '', $content = '')
+    public function create($title = '', $content = '', $pid = '')
     {
         Factory::validate('title,content');
         $model = Idea::getInstant();
@@ -61,6 +85,7 @@ class Ideas extends WithToken implements NormalInter
         $model->content = $content;
         $model->uid = $this->uid;
         $model->title = $title;
+        $model->pid = $pid;
         $res = $model->save();
 
         if ($res) Response::success('新增成功');

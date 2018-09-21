@@ -28,6 +28,14 @@ class UserTokenAccess
                 'msg' => '请先登录',
                 'errorCode' => 40101
             ]);
-        return $uid;
+        return true;
+    }
+
+    public static function getUid()
+    {
+        $token = Request::header('token');
+        $uid = Factory::redis()->get($token);
+        if ($uid) return $uid;
+        return '';
     }
 }

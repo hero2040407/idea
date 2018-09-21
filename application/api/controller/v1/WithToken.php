@@ -12,11 +12,18 @@ use app\api\service\UserTokenAccess;
 use app\lib\exception\ParameterException;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
+use think\App;
 use think\facade\Request;
 
 class WithToken extends Base
 {
     protected $uid;
+
+    public function __construct(App $app = null)
+    {
+        parent::__construct($app);
+        $this->uid = UserTokenAccess::getUid();
+    }
 
     /**
      * WithToken constructor.
@@ -24,8 +31,9 @@ class WithToken extends Base
      */
     protected function userNeedToken()
     {
-        $this->uid = UserTokenAccess::needToken();
+        UserTokenAccess::needToken();
     }
+
 
 
 }
