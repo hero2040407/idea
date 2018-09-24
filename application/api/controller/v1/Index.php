@@ -57,12 +57,12 @@ class Index extends Base
      * Date: 2018/9/7 0007
      * Time: 上午 10:52
      * @throws
-     * @route('post/index')
      */
     public function index()
     {
-        $data = $this->data;
-        $this->success('','',$data);
+        echo strlen('https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eq4HZFL7WFI9V8K81YFdFQlL3KgehicQVLFoibfHW8wDHde4Hjia6xTjgYOo4j5mjgactptaEO9jA2eg/132');
+//        $data = $this->data;
+//        $this->success('','',$data);
     }
 
     /**

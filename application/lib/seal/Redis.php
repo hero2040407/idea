@@ -7,33 +7,13 @@
  */
 namespace app\lib\seal;
 
-class Redis{
-
-    private $instance;
-
-    public function init($host, $port)
+class Redis extends \Redis
+{
+    public function __construct()
     {
-        $this->instance = new \Redis();
-        $this->instance->pconnect($host, $port, 0);
+        $this->pconnect('127.0.0.1', 6379, 0);
     }
 
-    public function auth($password)
-    {
-        $this->instance->auth($password);
-    }
-
-    public function selectDb($db)
-    {
-        $this->instance->select($db);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInstance()
-    {
-        return $this->instance;
-    }
 
     /**
      * Notes:

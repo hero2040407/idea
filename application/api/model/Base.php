@@ -23,8 +23,8 @@ class Base extends Model
         $map = [];
         $data = $this->getData();
         foreach ($data as $key => $value){
-            if (empty($value)) continue;
-            $map[] = is_array($value) ? [$key,$value[0],$value[1]] : [$key,'=',$value];
+            if ($value !== '')
+                $map[] = is_array($value) ? [$key,$value[0],$value[1]] : [$key,'=',$value];
         }
         return $this->where($map);
     }

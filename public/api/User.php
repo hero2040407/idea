@@ -8,7 +8,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\Base;
-use app\api\service\micro\Login;
+use app\api\service\mini\Login;
 use app\lib\seal\Factory;
 use app\lib\seal\tool\Common;
 use app\lib\seal\http\Response;

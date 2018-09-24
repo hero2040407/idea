@@ -5,7 +5,7 @@
  * Date: 2018/9/10 0010
  * Time: 上午 11:10
  */
-namespace app\api\service\micro;
+namespace app\api\service\mini;
 
 use app\api\model\User;
 use app\lib\seal\Factory;

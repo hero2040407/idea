@@ -12,8 +12,7 @@ class Factory
     public static function redis()
     {
         $redis = new \Redis();
-        $redis->pconnect('127.0.0.1', 6379, 0);
-        $redis->auth('ChenyueAbc.123');
+        $redis->connect('127.0.0.1', 6379, 0);
 //        $redis->select(11);
         return $redis;
     }

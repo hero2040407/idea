@@ -8,6 +8,7 @@
 namespace app\api\controller\v1;
 
 use app\api\model\Idea;
+use app\api\service\mini\IdeaRedis;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
 use app\lib\seal\tool\NormalInter;
@@ -30,6 +31,31 @@ class Ideas extends WithToken implements NormalInter
         $model->create_time = $title;
         $model->pid = 0;
         $list = $model->setMap()->order('create_time desc')->paginate(10, true);
+        $result = (new IdeaRedis())->viewCount($list);
+        Response::success($result);
+    }
+
+    /**
+     * Notes: idea个人列表
+     * Date: 2018/9/11 0011
+     * Time: 下午 3:36
+     * @throws
+     */
+    public function person($type = '')
+    {
+        $model = Idea::getInstant();
+        switch ($type){
+            case 'mine':
+                $model->uid = $this->uid;
+                break;
+            case 'collect':
+                $ids = (new IdeaRedis())->ideaCollection($this->uid);
+                $model->id = ['in', $ids];
+                break;
+            default:
+                break;
+        }
+        $list = $model->setMap()->order('create_time desc')->paginate(10, true);
         Response::success($list);
     }
 
@@ -42,16 +68,18 @@ class Ideas extends WithToken implements NormalInter
      */
     public function read($id = '')
     {
+        Factory::validate('id');
         $model = Idea::getInstant();
         $result = $model->readWithUserInfo($id);
         $result->isAuthor = false;
+        $result->isCollect = false;
         if ( $this->uid == $result->uid)
             $result->isAuthor = true;
+        if ((new IdeaRedis())->isIdeaCollect($id, $this->uid))
+            $result->isCollect = true;
 
-//        $idea = Idea::get($id);
-//        $user_info = User::get($idea->uid);
-//        $idea->nickname = $user_info->nickname;
-//        $idea->avatarUrl = $user_info->avatar;
+        $view_count = Factory::redis()->hIncrBy('idea_view_count', $id,1);
+        $result->viewCount = $view_count;
         Response::success($result);
     }
 
@@ -88,7 +116,10 @@ class Ideas extends WithToken implements NormalInter
         $model->pid = $pid;
         $res = $model->save();
 
-        if ($res) Response::success('新增成功');
+        if ($res){
+            Factory::redis()->hIncrBy('idea_view_count', $model->id,1);
+            Response::success('新增成功');
+        }
         Response::error('新增失败');
     }
 
@@ -101,6 +132,7 @@ class Ideas extends WithToken implements NormalInter
 
     public function save()
     {
+
     }
 
     public function douban()
@@ -125,5 +157,27 @@ class Ideas extends WithToken implements NormalInter
         $model->content = 123;
         $model->save();
         Response::success('修改成功');
+    }
+
+    /**
+     * Note: 点击收藏
+     * Data:11:55
+     * @throws
+     */
+    public function collect($id = '')
+    {
+        Factory::validate('id');
+        $title = (new IdeaRedis())->ideaCollect($id, $this->uid);
+        Response::success($title);
+    }
+
+    /**
+     * Note: 个人收藏
+     * Data:11:56
+     * @throws
+     */
+    public function collection()
+    {
+
     }
 }
