@@ -10,7 +10,7 @@ namespace app\lib\validate;
 
 //use app\index\service\Token;
 use app\lib\exception\ParameterException;
-use think\Facade\Request;
+use think\facade\Request;
 use think\Validate;
 
 /**
