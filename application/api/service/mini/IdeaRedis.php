@@ -24,7 +24,8 @@ class IdeaRedis extends Redis
     public function viewCount($list)
     {
         foreach ($list as &$item){
-            $item['viewCount'] = $this->hGet('idea_view_count',$item['id']);
+            $count = $this->hGet('idea_view_count',$item['id']);
+            $item['viewCount'] = $count ? $count : 0;
         }
         return $list;
     }

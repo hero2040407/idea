@@ -37,11 +37,10 @@ class Comments extends WithToken implements NormalInter
      * Data:11:18
      * @throws
      */
-    public function person($uid = '')
+    public function person()
     {
-        Factory::validate('uid');
         $model = Comment::getInstant();
-        $model->uid = $uid;
+        $model->uid = $this->uid;
         $list = $model->setMap()->order('create_time desc')->paginate(10,true);
         Response::success($list);
     }

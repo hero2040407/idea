@@ -56,7 +56,8 @@ class Ideas extends WithToken implements NormalInter
                 break;
         }
         $list = $model->setMap()->order('create_time desc')->paginate(10, true);
-        Response::success($list);
+        $result = (new IdeaRedis())->viewCount($list);
+        Response::success($result);
     }
 
     /**
