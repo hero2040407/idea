@@ -74,8 +74,7 @@ class IdeaRedis extends Redis
     {
         $collection = $this->hGet('idea_person_collection', $uid);
         $collection = json_decode($collection, true);
-
-        if (($res = array_search($id, $collection)) !== false){
+        if (($res = array_search($id, (array)$collection)) !== false){
             unset($collection[$res]);
             $title = '取消收藏';
         }
