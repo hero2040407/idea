@@ -28,7 +28,9 @@ class Comments extends WithToken implements NormalInter
     {
         Factory::validate('foreign_id');
         $model = Comment::getInstant();
-        $list = $model->index($foreign_id);
+        $model->foreign_id = $foreign_id;
+        $model->pid = 0;
+        $list = $model->index();
         Response::success($list);
     }
 
@@ -41,7 +43,8 @@ class Comments extends WithToken implements NormalInter
     {
         $model = Comment::getInstant();
         $model->uid = $this->uid;
-        $list = $model->setMap()->order('create_time desc')->paginate(10,true);
+        $model->pid =  0;
+        $list = $model->myReply();
         Response::success($list);
     }
 
@@ -61,7 +64,6 @@ class Comments extends WithToken implements NormalInter
         $res = $model->save();
         if ($res) Response::success('评论添加成功');
         Response::error('评论添加失败');
-
     }
 
     public function delete($id = '')

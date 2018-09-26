@@ -14,15 +14,43 @@ class Comment extends Base
         return $this->belongsTo('User','uid')->field('id,nickname,avatar');
     }
 
+    public function reply()
+    {
+        return $this->hasMany('Comment','pid')->with('userInfo');
+    }
+
     /**
      * Note:
      * Data:17:36
      * @return \think\Paginator
      * @throws
      */
-    public function index($foreign_id)
+    public function index()
     {
-        return self::with('userInfo')
-            ->where('foreign_id',$foreign_id)->paginate(10,true);
+        return $this->setMap()->with('userInfo,reply')->paginate(10,true);
+    }
+    
+    /**
+     * Notes:我的评论消息
+     * Date: 2018/9/26 0026
+     * Time: 上午 10:43
+     * @throws
+     */
+    public function parent()
+    {
+        return $this->belongsTo('Comment','pid');
+    }
+
+    /**
+     * Notes:
+     * Date: 2018/9/26 0026
+     * Time: 下午 12:13
+     * @throws
+     * @return \think\Paginator
+     */
+    public function myReply()
+    {
+        $pids = $this->setMap()->column('id');
+        return self::with('parent,userInfo')->whereIn('pid',$pids)->paginate(10,true);
     }
 }

@@ -29,6 +29,17 @@ class Base extends Model
         return $this->where($map);
     }
 
+    public function getMap()
+    {
+        $map = [];
+        $data = $this->getData();
+        foreach ($data as $key => $value){
+            if ($value !== '')
+                $map[] = is_array($value) ? [$key,$value[0],$value[1]] : [$key,'=',$value];
+        }
+        return $map;
+    }
+
     /**
      * Notes: 新增时给类加id
      * Date: 2018/9/12 0012
