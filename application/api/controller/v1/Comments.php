@@ -29,7 +29,6 @@ class Comments extends WithToken implements NormalInter
         Factory::validate('foreign_id');
         $model = Comment::getInstant();
         $model->foreign_id = $foreign_id;
-        $model->pid = 0;
         $list = $model->index();
         Response::success($list);
     }

@@ -14,11 +14,6 @@ class Comment extends Base
         return $this->belongsTo('User','uid')->field('id,nickname,avatar');
     }
 
-    public function reply()
-    {
-        return $this->hasMany('Comment','pid')->with('userInfo');
-    }
-
     /**
      * Note:
      * Data:17:36
@@ -27,7 +22,7 @@ class Comment extends Base
      */
     public function index()
     {
-        return $this->setMap()->with('userInfo,reply')->paginate(10,true);
+        return $this->setMap()->with('userInfo,parent')->paginate(10,true);
     }
     
     /**
