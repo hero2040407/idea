@@ -12,7 +12,7 @@ use app\lib\seal\tool\Common;
 use app\lib\validate\CustomValidate;
 use app\lib\seal\AesEncrypt;
 use mumbaicat\makeapidoc\ApiDoc;
-
+use think\facade\Env;
 
 
 class Index extends Base
@@ -114,5 +114,10 @@ class Index extends Base
     public function encryptFile()
     {
         Common::getFolderFiles('api','temp_api');
+    }
+
+    public function test()
+    {
+        echo Env::get('database.password');
     }
 }
