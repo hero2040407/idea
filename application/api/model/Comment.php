@@ -33,7 +33,7 @@ class Comment extends Base
      */
     public function parent()
     {
-        return $this->belongsTo('Comment','pid');
+        return $this->belongsTo('Comment','pid')->with('userInfo');
     }
 
     /**

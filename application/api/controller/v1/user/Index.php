@@ -8,16 +8,9 @@
 namespace app\api\controller\v1\user;
 
 use app\api\controller\Base;
-use app\api\model\Test;
-use app\api\service\GetToken;
-use app\lib\seal\AesEncrypt;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
-use app\lib\seal\Redis;
 use app\lib\validate\CustomValidate;
-use think\Container;
-use think\facade\Cache;
-use think\facade\Log;
 use think\facade\Request;
 
 class Index extends Base
@@ -32,12 +25,8 @@ class Index extends Base
      */
     public function login($code = '')
     {
-//        echo strlen('fCcVwGiosgMIJDFnh7huZQ==');
         (new CustomValidate())->requires('code')->goCheck();
-//
         $result = (new GetToken())->getOpenId($code);
-
-        $uid =
         Response::success($result);
     }
 
