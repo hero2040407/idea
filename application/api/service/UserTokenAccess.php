@@ -38,4 +38,12 @@ class UserTokenAccess
         if ($uid) return $uid;
         return '';
     }
+
+    public static function getToken()
+    {
+        $token = Request::header('token');
+        $uid = Factory::redis()->get($token);
+        if ($uid) return $token;
+        return false;
+    }
 }

@@ -69,14 +69,14 @@ class Login
         }
         else $uid = $this->register($result, $userInfo);
 
-        $res = UserTokenAccess::getUid();
+        $token = UserTokenAccess::getToken();
 
-        if (!$res){
+        if (!$token){
             session_start();
             $token = md5(session_id().$uid.time());
             session_destroy();
 
-            $res = Factory::redis()->set($token,$uid,3600*24*7);
+            $res = Factory::redis()->set($token,$uid,3600*24);
             if (!$res) Response::error('token未能正确设置');
         }
         return $token;
