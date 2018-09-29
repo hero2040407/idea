@@ -42,7 +42,7 @@ class User extends Base
      * @throws
      * @return bool
      */
-    public function decFeeling($count = 1)
+    public static function decFeeling($count = 1)
     {
         $model = self::get(UserTokenAccess::getUid());
         $res = $model->setDec('feeling',$count);

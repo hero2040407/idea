@@ -185,8 +185,8 @@ class Ideas extends WithToken implements NormalInter
     public function incFeeling($id = '')
     {
         Factory::validate('id');
-        $list = Idea::getInstant()->incFeeling($id);
-        User::getInstant()->decFeeling();
+        $list = Idea::incFeeling($id);
+        User::decFeeling();
         Response::success($list);
     }
 }

@@ -40,7 +40,7 @@ class Idea extends Base
      * @param $id
      * @throws
      */
-    public function incFeeling($id)
+    public static function incFeeling($id)
     {
         $model = self::get($id);
         $model->setInc('feeling');
