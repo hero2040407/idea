@@ -32,4 +32,19 @@ class Idea extends Base
     {
         return self::with('userInfo,ideaItems')->find($id);
     }
+
+    /**
+     * Notes:增加灵感
+     * Date: 2018/9/29 0029
+     * Time: 下午 4:42
+     * @param $id
+     * @throws
+     */
+    public function incFeeling($id)
+    {
+        $model = self::get($id);
+        $model->setInc('feeling');
+        $list['feeling'] = $model->feeling;
+        return $list;
+    }
 }

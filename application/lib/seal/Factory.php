@@ -13,6 +13,7 @@ class Factory
     {
         $redis = new \Redis();
         $redis->connect('127.0.0.1', 6379, 0);
+        $redis->auth('ChenyueAbc.123');
 //        $redis->select(11);
         return $redis;
     }

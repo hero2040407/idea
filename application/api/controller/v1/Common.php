@@ -12,7 +12,7 @@ use app\api\service\mini\Login;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
 
-class User extends Base
+class Common extends Base
 {
     /**
      * Notes:
@@ -29,11 +29,5 @@ class User extends Base
         $result = $login->login($userInfo);
 
         Response::success($result);
-    }
-
-    public function test()
-    {
-//        var_dump(Factory::redis()->keys('*'));
-//        echo strlen(Common::generateUid());
     }
 }

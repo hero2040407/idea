@@ -8,7 +8,6 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\Base;
-use app\lib\seal\tool\Common;
 use app\lib\validate\CustomValidate;
 use app\lib\seal\AesEncrypt;
 use mumbaicat\makeapidoc\ApiDoc;
@@ -109,11 +108,6 @@ class Index extends Base
     {
         $doc = new ApiDoc('../application/api'); //参数1是代码目录
         echo $doc->make();  //生成
-    }
-
-    public function encryptFile()
-    {
-        Common::getFolderFiles('api','temp_api');
     }
 
     public function test()

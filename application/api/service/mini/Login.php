@@ -9,10 +9,10 @@ namespace app\api\service\mini;
 
 use app\api\model\User;
 use app\api\model\UserFeeling;
+use app\api\service\UserTokenAccess;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Curl;
 use app\lib\seal\http\Response;
-use think\facade\Request;
 
 class Login
 {
@@ -59,7 +59,7 @@ class Login
     {
         $result = $this->getOpenId();
         $model = User::get(['openid' => $result['openid']]);
-        $uid = $model->uid;
+        $uid = $model->id;
 
         if ($uid){
             $model->session_key = $result['session_key'];
@@ -69,12 +69,13 @@ class Login
         }
         else $uid = $this->register($result, $userInfo);
 
-        $token = Request::header('token');
-        $res = Factory::redis()->get($token);
+        $res = UserTokenAccess::getUid();
 
         if (!$res){
             session_start();
             $token = md5(session_id().$uid.time());
+            session_destroy();
+
             $res = Factory::redis()->set($token,$uid,3600*24*7);
             if (!$res) Response::error('token未能正确设置');
         }

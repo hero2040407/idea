@@ -13,6 +13,7 @@ use app\api\service\mini\IdeaRedis;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
 use app\lib\seal\tool\NormalInter;
+use app\api\model\User;
 
 class Ideas extends WithToken implements NormalInter
 {
@@ -176,12 +177,16 @@ class Ideas extends WithToken implements NormalInter
     }
 
     /**
-     * Note: 个人收藏
-     * Data:11:56
+     * Notes:用户给文章添加灵感值
+     * Date: 2018/9/29 0029
+     * Time: 下午 4:06
      * @throws
      */
-    public function collection()
+    public function incFeeling($id = '')
     {
-
+        Factory::validate('id');
+        $list = Idea::getInstant()->incFeeling($id);
+        User::getInstant()->decFeeling();
+        Response::success($list);
     }
 }
