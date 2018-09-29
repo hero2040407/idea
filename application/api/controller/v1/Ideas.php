@@ -8,6 +8,7 @@
 namespace app\api\controller\v1;
 
 use app\api\model\Idea;
+use app\api\model\UserFeeling;
 use app\api\service\mini\IdeaRedis;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
@@ -47,6 +48,7 @@ class Ideas extends WithToken implements NormalInter
         switch ($type){
             case 'mine':
                 $model->uid = $this->uid;
+                $model->pid = 0;
                 break;
             case 'collect':
                 $ids = (new IdeaRedis())->ideaCollection($this->uid);
@@ -119,6 +121,7 @@ class Ideas extends WithToken implements NormalInter
 
         if ($res){
             Factory::redis()->hIncrBy('idea_view_count', $model->id,1);
+            UserFeeling::incFeeling();
             Response::success('新增成功');
         }
         Response::error('新增失败');
@@ -155,7 +158,7 @@ class Ideas extends WithToken implements NormalInter
         $model = Idea::get($id);
 //        var_dump()
         $model->title = $title;
-        $model->content = 123;
+        $model->content = $content;
         $model->save();
         Response::success('修改成功');
     }

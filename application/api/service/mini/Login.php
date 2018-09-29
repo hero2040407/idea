@@ -8,10 +8,10 @@
 namespace app\api\service\mini;
 
 use app\api\model\User;
+use app\api\model\UserFeeling;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Curl;
 use app\lib\seal\http\Response;
-use app\lib\seal\tool\Common;
 use think\facade\Request;
 
 class Login
@@ -41,13 +41,11 @@ class Login
      */
     public function register($result, $userInfo)
     {
-        $model = new User();
-        $model->setId();
-        $model->openid = $result['openid'];
-        $model->session_key = $result['session_key'];
-        $model->avatar = $userInfo['avatarUrl'];
-        $model->nickname = $userInfo['nickName'];
-        $model->save();
+        $model = User::getInstant();
+        $feeling = UserFeeling::getInstant();
+        $model->register($result, $userInfo);
+//      为用户生成灵感记录
+        $feeling->createFeeling($model->id);
         return $model->id;
     }
 
@@ -60,19 +58,14 @@ class Login
     public function login($userInfo)
     {
         $result = $this->getOpenId();
-        $model = new User();
-        $uid = $model->where([
-            'openid' => $result['openid']
-        ])->value('id');
+        $model = User::get(['openid' => $result['openid']]);
+        $uid = $model->uid;
 
         if ($uid){
-            $model->save(
-                [
-                    'session_key' => $result['session_key'],
-                    'avatar' => $userInfo['avatarUrl'],
-                    'nickname' => $userInfo['nickName']
-                ],
-                ['openid' => $result['openid']]);
+            $model->session_key = $result['session_key'];
+            $model->avatar = $userInfo['avatarUrl'];
+            $model->nickname = $userInfo['nickName'];
+            $model->save();
         }
         else $uid = $this->register($result, $userInfo);
 
