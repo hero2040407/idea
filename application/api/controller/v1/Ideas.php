@@ -122,7 +122,6 @@ class Ideas extends WithToken implements NormalInter
 
         if ($res){
             Factory::redis()->hIncrBy('idea_view_count', $model->id,1);
-            UserFeeling::incFeeling();
             Response::success('新增成功');
         }
         Response::error('新增失败');
