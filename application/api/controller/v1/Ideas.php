@@ -8,7 +8,6 @@
 namespace app\api\controller\v1;
 
 use app\api\model\Idea;
-use app\api\model\UserFeeling;
 use app\api\service\mini\IdeaRedis;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
@@ -20,6 +19,7 @@ class Ideas extends WithToken implements NormalInter
     protected $beforeActionList = [
         'userNeedToken' => ['except' => 'index,read,items']
     ];
+
     /**
      * Notes: idea列表
      * Date: 2018/9/11 0011
@@ -32,6 +32,7 @@ class Ideas extends WithToken implements NormalInter
         $model = Idea::getInstant();
         $model->create_time = $title;
         $model->pid = 0;
+        $model->status = 24;
         $list = $model->setMap()->order('create_time desc')->paginate(10, true);
         $result = (new IdeaRedis())->viewCount($list);
         Response::success($result);
@@ -156,7 +157,6 @@ class Ideas extends WithToken implements NormalInter
     {
         Factory::validate('id');
         $model = Idea::get($id);
-//        var_dump()
         $model->title = $title;
         $model->content = $content;
         $model->save();
@@ -176,7 +176,9 @@ class Ideas extends WithToken implements NormalInter
     }
 
     /**
-     * Notes:用户给文章添加灵感值
+     * 用户给文章添加灵感值
+     * @url ideas/incFeeling/:id
+     * @method GET
      * Date: 2018/9/29 0029
      * Time: 下午 4:06
      * @throws

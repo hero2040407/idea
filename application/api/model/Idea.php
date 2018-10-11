@@ -8,8 +8,22 @@
 namespace app\api\model;
 
 
+use app\api\service\mini\IdeaRedis;
+
 class Idea extends Base
 {
+    /**
+     * Notes:
+     * Date: 2018/10/11 0011
+     * Time: 上午 11:21
+     * @throws
+     */
+    public function index()
+    {
+        $list = $this->setMap()->order('create_time desc')->paginate(10, true);
+        return (new IdeaRedis())->viewCount($list);
+    }
+    
     public function userInfo()
     {
         return $this->belongsTo('User','uid')->field('id,nickname,avatar');
@@ -40,10 +54,10 @@ class Idea extends Base
      * @param $id
      * @throws
      */
-    public static function incFeeling($id)
+    public static function incFeeling($id, $step = 1)
     {
         $model = self::get($id);
-        $model->setInc('feeling');
+        $model->setInc('feeling', $step);
         $list['feeling'] = $model->feeling;
         return $list;
     }
