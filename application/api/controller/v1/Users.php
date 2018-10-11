@@ -49,13 +49,13 @@ class Users extends WithToken
      * Time: 上午 11:17
      * @throws
      */
-    public function mine($is_public = '')
+    public function mine($status = '')
     {
         Factory::validate('is_public');
         $model = Idea::getInstant();
         $model->uid = $this->uid;
         $model->pid = 0;
-        $model->is_public = $is_public;
+        $model->is_public = $status;
         $list = $model->index();
         Response::success($list);
     }
