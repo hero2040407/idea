@@ -55,7 +55,7 @@ class Users extends WithToken
         $model = Idea::getInstant();
         $model->uid = $this->uid;
         $model->pid = 0;
-        $model->is_public = $status;
+        $model->status = $status;
         $list = $model->index();
         Response::success($list);
     }
