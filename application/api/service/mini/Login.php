@@ -42,10 +42,10 @@ class Login
     public function register($result, $userInfo)
     {
         $model = User::getInstant();
-        $feeling = UserFeeling::getInstant();
+//        $feeling = UserFeeling::getInstant();
         $model->register($result, $userInfo);
 //      为用户生成灵感记录
-        $feeling->createFeeling($model->id);
+//        $feeling->createFeeling($model->id);
         return $model->id;
     }
 

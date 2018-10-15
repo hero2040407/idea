@@ -11,6 +11,7 @@ use app\api\model\Comment;
 use app\api\model\Idea;
 use app\api\model\User;
 use app\api\service\mini\IdeaRedis;
+use app\api\service\mini\Sign;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Response;
 
@@ -22,6 +23,21 @@ class Users extends WithToken
     ];
 
     /**
+     * 用户获取灵感值
+     * @url users/getFeeling
+     * @method GET
+     * Date: 2018/10/15 0015
+     * Time: 上午 9:51
+     * @throws
+     */
+    public function getFeeling()
+    {
+        $model = User::get($this->uid);
+        $list['feeling'] = $model->feeling;
+        Response::success($list);
+    }
+    
+    /**
      * 用户签到获取灵感
      * @url users/sign
      * @method GET
@@ -31,14 +47,10 @@ class Users extends WithToken
      */
     public function sign()
     {
-        $redis = Factory::redis();
-        $res = $redis->hGet('sign_uids', $this->uid);
-        if (!$res){
-            $redis->hset('sign_uids', $this->uid, 1);
-            $list['feeling'] = User::getInstant()->incFeeling();
-            Response::success($list);
-        }
-        Response::error('此用户已签到');
+        $sign = new Sign();
+        $sign->uid = $this->uid;
+        $list = $sign->normal();
+        Response::success($list);
     }
 
     /**

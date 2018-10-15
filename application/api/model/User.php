@@ -8,6 +8,8 @@
 namespace app\api\model;
 
 use app\api\service\UserTokenAccess;
+use app\lib\exception\ParameterException;
+use app\lib\exception\ResultException;
 
 class User extends Base
 {
@@ -46,6 +48,10 @@ class User extends Base
     {
         $model = self::get(UserTokenAccess::getUid());
         $res = $model->setDec('feeling',$count);
-        return $res;
+        if (!$res){
+            throw new ResultException([
+              'msg' => '您的灵感不够了'
+            ]);
+        }
     }
 }
