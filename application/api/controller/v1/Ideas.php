@@ -190,4 +190,19 @@ class Ideas extends WithToken implements NormalInter
         $list = Idea::incFeeling($id);
         Response::success($list);
     }
+
+    /**
+     * Notes:申请为公开idea
+     * Date: 2018/10/18 0018
+     * Time: 上午 11:55
+     * @throws
+     */
+    public function apply($id = '')
+    {
+        Factory::validate('id');
+        $model = Idea::get($id);
+        $model->status = 16;
+        $model->save();
+        Response::success('申请成功,请等待审核');
+    }
 }
