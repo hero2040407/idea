@@ -25,18 +25,18 @@ class Sign
         $redis = Factory::redis();
         $res = json_decode($redis->hGet('sign_uids', $this->uid));
         $yesterday = date("Ymd", time() - 24* 3600 );
-        $today = date('Ymd', time());
+        $today = date("Ymd", time());
         $sign_data = [
             'times' => 1,
             'date' => $today
         ];
-        if ($res['date'] == $today){
+        if ($today == $res->date){
             throw new ResultException([
                 'msg' => '请勿重复签到'
             ]);
         }
-        elseif ($res['date'] == $yesterday){
-            $sign_data['times'] = $res['times'] + 1;
+        elseif ($yesterday == $res->date){
+            $sign_data['times'] = $res->times + 1;
         }
         $redis->hset('sign_uids', $this->uid, json_encode($sign_data));
         $list['feeling'] = User::getInstant()->incFeeling();

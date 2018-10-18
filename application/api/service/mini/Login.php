@@ -13,6 +13,7 @@ use app\api\service\UserTokenAccess;
 use app\lib\seal\Factory;
 use app\lib\seal\http\Curl;
 use app\lib\seal\http\Response;
+use think\facade\Env;
 
 class Login
 {
@@ -30,7 +31,13 @@ class Login
         $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='. self::APP_ID .'&secret='
             . self::APP_SECRET .'&js_code='. $this->code .'&grant_type=authorization_code';
 
+        if (Env::get('local.local')){
+            $result['session_key'] = 123;
+            $result['openid'] = 'ovLuV5EU51d_wSR2noALkGMrALts';
+            return $result;
+        }
         return Curl::https($url);
+
     }
 
     /**

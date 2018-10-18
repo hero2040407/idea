@@ -47,11 +47,11 @@ class User extends Base
     public static function decFeeling($count = 1)
     {
         $model = self::get(UserTokenAccess::getUid());
-        $res = $model->setDec('feeling',$count);
-        if (!$res){
+        if ($model->feeling === 0){
             throw new ResultException([
-              'msg' => '您的灵感不够了'
+                'msg' => '您的灵感不够了'
             ]);
         }
+        $model->setDec('feeling',$count);
     }
 }
