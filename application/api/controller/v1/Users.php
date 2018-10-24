@@ -63,11 +63,11 @@ class Users extends WithToken
      */
     public function mine($status = '')
     {
-        Factory::validate('is_public');
+        Factory::validate('status');
         $model = Idea::getInstant();
         $model->uid = $this->uid;
         $model->pid = 0;
-        $model->status = $status;
+        $model->status = ['in',$status];
         $list = $model->index();
         Response::success($list);
     }
