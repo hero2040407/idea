@@ -75,5 +75,36 @@ class Worker extends Base
         if ($name) echo '这个不为空';
         else echo 'name 为空';
     }
+
+    /*
+     * csv导出
+     */
+    public function csv($day = 0)
+    {
+        $date = date('Ymd', strtotime('-' . $day . ' day'));
+        $file_name = $date;
+        $fp = fopen('php://output', 'a');
+        $head_list = ['排行', '搜索词', '搜索次数'];
+        foreach ($head_list as $key => $value) {
+            $head_list[$key] = iconv('utf-8', 'gbk', $value);
+        }
+        fputcsv($fp, $head_list);
+        $keyword_list = db('works_keyword_log')->where(['cdate' => $date])
+            ->field('keyword,count')->order('count desc')->limit(100)->select();
+        $i = 1;
+        foreach ($keyword_list as $item) {
+            $arr = [];
+            $arr[] = $i++;
+            $arr[] = iconv('utf-8', 'gbk', $item['keyword']);
+            $arr[] = $item['count'];
+            fputcsv($fp, $arr);
+        }
+        header('Content-Encoding: UTF-8');
+        header('Content-type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment;filename="'. $file_name .'.csv"');
+        header('Cache-Control: max-age=0');
+        fclose($fp);
+        exit();
+    }
 }
 

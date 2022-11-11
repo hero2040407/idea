@@ -22,7 +22,7 @@
         "workerman/gateway-worker": "^3.0",
         "workerman/gatewayclient": "^3.0",
         "phpseclib/phpseclib": "^2.0",
-        "minimum-stability":"dev"
+        "elasticsearch/elasticsearch": "7.17.1"
     },
     "autoload": {
         "psr-4": {
@@ -33,14 +33,9 @@
         "think-path": "thinkphp"
     },
     "config": {
-        "preferred-install": "dist"
-    },
-    "scripts":{
-        "post-install-cmd": [
-            "php vendor/skj198568/tp5_smart/create_files.php"
-        ],
-        "post-update-cmd": [
-            "php vendor/skj198568/tp5_smart/create_files.php"
-        ]
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "topthink/think-installer": true
+        }
     }
 }
